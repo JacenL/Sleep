@@ -123,10 +123,41 @@ There is no second account and no API budget.
 - Be economical: read only the files a task needs, and do not spawn
   subagents or run broad searches where a targeted read will do.
 
+## Git and GitHub
+
+The remote is `origin`, https://github.com/JacenL/Sleep (public). The default
+branch is `main`. This is a solo project: no pull requests or reviews are
+required.
+
+- **The repo is public.** Never commit anything personal or secret: real
+  sleep data, CSV exports, HealthKit dumps, screenshots containing real data,
+  signing certificates, provisioning profiles, tokens, or `.env` files. Test
+  fixtures use invented data only. If a file like that needs to exist locally,
+  add it to `.gitignore` first.
+- **Commit identity** is already set for this repo to GitHub's private
+  noreply address. Do not change `user.email`, and do not write the owner's
+  real email address into any file or commit message.
+- **Branching:** do each milestone on a branch named `m<n>-<short-name>`
+  (for example `m2-data-layer`). When the user accepts the milestone,
+  fast-forward `main` to it, push `main`, and delete the branch. Keep `main`
+  always building with tests passing.
+- **Commits:** small, one concern each, in the order the work makes sense to
+  read. Subject line in the imperative, under about 70 characters ("Add debt
+  ledger"), with a body only when the why is not obvious. Run the science
+  tests and the simulator build before committing.
+- **Commit only when asked. Push only when asked.** "Commit this" does not
+  mean push.
+- **Never rewrite pushed history:** no force-push, no amend or rebase of
+  commits already on `origin`. Fix mistakes with a new commit. If something
+  private is pushed by accident, stop and tell the user immediately rather
+  than trying to hide it.
+- **Never commit generated files:** `Sleep.xcodeproj`, `.build/`,
+  `DerivedData/` (already git-ignored).
+
 ## Working agreement
 
 - Ask before: adding a dependency, changing a model or a parameter, adding a
   HealthKit data type, or anything that changes what a number on screen means.
-- Small commits, one concern each. Commit only when asked.
+- Commit and push only when asked; see "Git and GitHub" below.
 - When a milestone in `docs/ROADMAP.md` is complete, say what was verified
   and how, and what was not.
