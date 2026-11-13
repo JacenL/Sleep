@@ -1,0 +1,93 @@
+name: Sleep
+
+options:
+  bundleIdPrefix: com.jasonliang
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    DEVELOPMENT_TEAM: GA7F22RFUJ
+    CODE_SIGN_STYLE: Automatic
+    TARGETED_DEVICE_FAMILY: "1"
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+
+packages:
+  SleepScience:
+    path: Packages/SleepScience
+
+targets:
+  Sleep:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+    dependencies:
+      - package: SleepScience
+      - sdk: HealthKit.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.jasonliang.sleep
+        PRODUCT_NAME: Sleep
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Sleep
+        LSRequiresIPhoneOS: true
+        UILaunchScreen:
+          UIColorName: Background
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        # Declared in M0, used from M2 (HealthKit) and M5 (background refresh).
+        NSHealthShareUsageDescription: Sleep reads your sleep from Health to show your sleep history and estimate your energy through the day.
+        NSHealthUpdateUsageDescription: Sleep saves the sleep you log by hand to Health so your other apps can see it.
+        UIBackgroundModes:
+          - fetch
+    entitlements:
+      path: App/Sleep.entitlements
+      properties:
+        com.apple.developer.healthkit: true
+        com.apple.developer.healthkit.access: []
+        com.apple.developer.healthkit.background-delivery: true
+
+  SleepTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: AppTests
+    dependencies:
+      - target: Sleep
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.jasonliang.sleep.tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/Sleep.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Sleep
+        BUNDLE_LOADER: $(TEST_HOST)
+
+schemes:
+  Sleep:
+    build:
+      targets:
+        Sleep: all
+        SleepTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - SleepTests
+        - package: SleepScience/SleepScienceTests

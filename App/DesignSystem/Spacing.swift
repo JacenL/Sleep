@@ -1,0 +1,14 @@
+import CoreFoundation
+
+/// 4 pt grid.
+enum Spacing {
+    static let xs: CGFloat = 4
+    static let s: CGFloat = 8
+    static let m: CGFloat = 12
+    static let l: CGFloat = 16
+    static let xl: CGFloat = 24
+
+    static let screenMargin: CGFloat = 16
+    static let cardGap: CGFloat = 12
+    static let cardCornerRadius: CGFloat = 20
+}
