@@ -63,12 +63,43 @@ HealthKit `sleepAnalysis` samples arrive from several sources and overlap.
 4. `inBed`-only episodes are marked `quality: .estimated` and counted as
    sleep without correction. Do not apply a made-up efficiency factor. Show
    the "estimated" flag in the UI.
-5. Manual entries are the user's stated truth and override HealthKit for
-   overlapping time.
+5. Entries the user typed or edited by hand are the user's stated truth and
+   override everything else for overlapping time.
+5a. The owner has no wearable, so most nights come from two phone-only
+   sources (section 3.1). Both record **time in bed, not time asleep**. They
+   are treated exactly like `inBed`: `quality: .estimated`, counted as sleep
+   without correction, used only where no `asleep*` samples exist, and
+   preferred over HealthKit `inBed` for the same time. If the user edits one,
+   it becomes a hand entry under rule 5.
 6. An episode belongs to the calendar day (user's current time zone) in
    which it **ends**. Episodes shorter than 3 h that end between 10:00 and
    20:00 are naps: they count toward that day's total and feed the model
    normally.
+
+### 3.1 Phone-only sources
+
+- **Automation-logged**: bedtime and wake-up recorded by App Intents that
+  the user triggers from iOS Shortcuts automations (Sleep Focus on/off,
+  alarm stopped) or from the in-app button. Start and end are the moments
+  the automation fired.
+- **Motion-suggested**: the app reads the phone's stored motion history and
+  proposes the longest overnight stationary stretch as a candidate night.
+  It is **only ever a suggestion**: nothing enters the sleep history until
+  the user confirms or adjusts it. A stationary phone is not evidence of
+  sleep (it may be on a desk), so an unconfirmed suggestion is never fed to
+  the model, the ledger, or notifications.
+
+Consequence to state in the explainer: time in bed overstates sleep by the
+time taken to fall asleep plus time awake in the night, so on estimated
+nights the debt and energy figures are somewhat optimistic. The size of
+that bias is not known for the individual and the app does not correct for
+it.
+
+The exact candidate-detection rule for motion suggestions (minimum length,
+time window, how gaps are bridged) is a display convention, to be proposed
+by the implementer, agreed with the user, and recorded in
+`DisplayConventions.swift`. It is not a scientific sleep-detection method
+and must not be described as one.
 
 ## 4. Alertness model (v1): Three-Process Model
 

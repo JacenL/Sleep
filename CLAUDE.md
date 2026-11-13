@@ -18,6 +18,10 @@ Read these before touching the matching area. They are the source of truth:
 - Swift 6, SwiftUI, iOS 26 deployment target, Xcode 26. iPhone only.
 - Swift Charts for every chart. SwiftData for local storage.
 - HealthKit (read sleep analysis; write only the user's manual entries).
+- The owner has no Apple Watch or other wearable. Phone-only tracking is the
+  main path: App Intents triggered by Shortcuts automations, plus
+  motion-history suggestions the user confirms (CoreMotion). HealthKit is
+  kept so a wearable added later works with no changes.
 - UserNotifications, local only. No push, no server.
 - No third-party dependencies. If one seems necessary, stop and ask.
 - XcodeGen: `project.yml` is the source of truth for the Xcode project.

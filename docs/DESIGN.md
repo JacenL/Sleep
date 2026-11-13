@@ -69,10 +69,21 @@ Top to bottom:
 4. **Next up**: the next event with a relative time ("Afternoon dip in
    2 h 10 min").
 5. If awake state is unknown (no sleep recorded for last night): a single
-   prompt card, "When did you sleep?", opening the entry editor.
+   prompt card above the low-confidence curve.
+   - With a motion suggestion: "Your phone was still 23:40 to 07:10. Is
+     that when you slept?" with **Yes**, **Adjust** (opens the entry editor
+     pre-filled) and **I didn't sleep**. The wording says "phone was
+     still", never "you slept".
+   - Without one: "When did you sleep?" with **Add** and **I didn't sleep**.
 
-A "Going to sleep" / "I'm awake" button sits in the bottom toolbar for
-manual tracking. It is hidden when HealthKit is supplying nightly data.
+A "Going to sleep" / "I'm awake" button sits in the bottom toolbar. It
+shares its logic with the Shortcuts actions, so a bedtime logged by an
+automation shows the button in its "I'm awake" state. It is hidden when
+HealthKit is supplying nightly asleep data.
+
+Nights from automations or confirmed motion suggestions carry the
+"estimated" hatching and, in Day detail, a one-line origin: "Logged by
+automation · time in bed" or "Confirmed from phone motion · time in bed".
 
 ### Sleep
 
@@ -103,15 +114,25 @@ manual tracking. It is hidden when HealthKit is supplying nightly data.
 
 Sleep need (stepper, 15-minute steps, with the guidance ranges shown),
 notification toggles per event type plus quiet hours, data sources
-(HealthKit status, link to the Health app's permissions), export data as
-CSV, delete all data.
+(HealthKit status, link to the Health app's permissions), **Automatic
+tracking** (see below), export data as CSV, delete all data.
+
+**Automatic tracking** is a short illustrated guide, since the automations
+are created by the user in the Shortcuts app and cannot be installed by
+this app: turn on Sleep Focus with a schedule; add an automation "When
+Sleep Focus turns on → Log bedtime"; add "When my alarm is stopped → Log
+wake-up" (or Sleep Focus turns off); set each to run immediately without
+asking. It shows when each action last ran, so the user can tell the
+automations are working, and has the toggle and permission state for motion
+suggestions.
 
 ### Onboarding
 
 Three screens at most: what the app does and that its energy figures are
 predictions; sleep need; permissions (Health, then notifications), each
 requested at the moment its value is explained. The app must be fully
-usable with both denied.
+usable with both denied. Onboarding ends by offering the Automatic tracking
+guide, skippable.
 
 ## Copy rules
 

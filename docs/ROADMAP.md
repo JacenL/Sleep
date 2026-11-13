@@ -48,11 +48,32 @@ verification report.
   histories (regular sleeper, short sleeper, irregular, sparse, empty).
 - HealthKit authorisation flow, anchored queries, observer query with
   background delivery.
-- Manual tracking: start/stop sleep, add/edit/delete an entry.
+- Manual tracking: start/stop sleep, add/edit/delete an entry, and an
+  explicit "I didn't sleep" entry.
+- **Automatic tracking without a wearable** (the owner has no Apple Watch,
+  so this is the main path, not an extra). See SCIENCE.md section 3.1.
+  - App Intents `Log bedtime` and `Log wake-up`, exposed to Shortcuts and
+    runnable in the background without opening the app. They must be safe
+    against misfires: a second bedtime replaces an open one, a wake-up with
+    no open bedtime is ignored, and an implausibly long open episode is
+    closed as "needs review" instead of being logged.
+  - Motion-suggested nights: a `MotionHistoryProvider` protocol with a
+    CoreMotion implementation and a fake. Before building, read Apple's
+    current documentation for motion-activity history and confirm how far
+    back it goes, what permission it needs, and whether it works on a free
+    development team; report what you find. Add `NSMotionUsageDescription`.
+    Suggestions are stored separately from sleep entries until confirmed.
+  - Update `EpisodeMerger` in the science package for the amended
+    precedence in SCIENCE.md section 3 (rules 5 and 5a), with tests.
+- Each entry records its origin (typed, automation, motion-confirmed,
+  HealthKit) so the UI can show it and the merger can rank it.
 
-Done when: unit tests cover merging and fixtures; in the simulator, sleep
-added in the Health app appears in a debug list, and manual entries persist
-across relaunch.
+Done when: unit tests cover merging, fixtures, intent misfire cases and the
+suggestion rule; in the simulator, sleep added in the Health app appears in
+a debug list, running each intent from the Shortcuts app creates the
+expected entry, and manual entries persist across relaunch. Motion history
+and real automations can only be confirmed on a physical iPhone: say so in
+the report and list the steps for the user to try.
 
 ## M3 — Today
 
